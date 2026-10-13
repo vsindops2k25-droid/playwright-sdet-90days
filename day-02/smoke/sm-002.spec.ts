@@ -9,6 +9,7 @@ const banner = page.getByAltText('Banner 1');
 console.log(await banner.getAttribute('src'));
 // Verify Banner is visible
 await expect(banner).toBeVisible();
+
 }
 );
 

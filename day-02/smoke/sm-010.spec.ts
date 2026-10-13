@@ -81,6 +81,32 @@ await expect(footerSection.getByRole('link', { name : 'Our Vision'})).toBeVisibl
 await expect(footerSection.getByRole('link', { name : 'Our Mission'})).toBeVisible();
 await expect(footerSection.getByRole('link', { name : 'Our History'})).toBeVisible();
 
+
+// OTHER Section
+
+const otherSection =   footerSection.getByRole('heading', { name : 'Other'});
+const otherSectionCount = await otherSection.count();
+console.log('The count for the Other Section label is: ', otherSectionCount);
+for (let i = 0; i<otherSectionCount; i++){
+    console.log(`Element ${i}:`, 
+        await otherSection.nth(i).evaluate(el => ({
+            tag : el.tagName,
+            text : el.textContent.trim(),
+            visible : !!(el as HTMLElement).offsetParent,
+            outerHTML: el.outerHTML
+
+        }))
+    )
+}
+
+await expect(otherSection).toBeVisible();
+await expect(footerSection.getByRole('link', { name : 'News', exact : true})).toBeVisible();
+await expect(footerSection.getByRole('link', { name : 'Careers', exact : true})).toBeVisible();
+await expect(footerSection.getByRole('link', { name : 'Blogs', exact : true})).toBeVisible();
+await expect(footerSection.getByRole('link', { name : 'News', exact : true})).toHaveAttribute('href', '/News' );
+await expect(footerSection.getByRole('link', { name : 'Careers', exact : true})).toHaveAttribute('href', 'https://recruitment.theelixrlabs.com/jobs/Careers');
+await expect(footerSection.getByRole('link', { name : 'Blogs', exact : true})).toHaveAttribute('href', '/Blog');
+
 });
 
 

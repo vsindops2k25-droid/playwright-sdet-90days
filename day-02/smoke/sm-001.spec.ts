@@ -16,7 +16,32 @@ const title = await page.title();
 console.log('Actual Title', title);
 // validate the page title
 await expect(page).toHaveTitle('Elixr');
-console.log('Test Case PASSED');
+// Verify the LOGO
+const img = page.getByRole('img', { name : 'Logo', exact : true});
+await expect(img).toHaveCount(1);
+await expect(img).toBeVisible();
+const imgSrc = await img.getAttribute('src');
+
+const box = await img.boundingBox();
+console.log('Logo box:', box);
+expect(box!.width).toBeGreaterThan(0);
+expect(box!.height).toBeGreaterThan(0);
+
+await expect(img).toHaveAttribute('alt', 'Logo');
+await expect(img).toHaveAttribute('src', /elixr_logo\.svg$/);
+await expect.poll (() => 
+img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+
+console.log('The Image Source is:', imgSrc);
+
+const loaded = await img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0);
+expect(loaded).toBe(true);
+console.log ('Image Loaded: ', loaded);
+
+const response = await page.request.get(new URL(imgSrc!, page.url()).toString());
+expect(response.status()).toBe(200);
+expect(response.headers()['content-type']).toContain('svg');
+
 
 }
 );
